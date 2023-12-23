@@ -1,0 +1,107 @@
+//
+// GameView.swift
+//  Minesweeper
+//
+//  Created by Nick Deupree on 12/20/23.
+//
+
+import SwiftUI
+import Combine
+
+struct GameView: View {
+    @ObservedObject var game = MinesweeperGame()
+    //@State var timer: Timer? = nil
+    @State var timeElapsed: Int = 0
+    var ogCellSize: CGFloat = 40
+    let controlPanelHeight: CGFloat = 50
+    @State private var zoomLevel: Double = 1.0
+    @GestureState private var magnification: CGFloat = 1.0
+    
+    var body: some View {
+        
+        GeometryReader { geometry in
+            let cellSize = min(min(NSScreen.main?.frame.width ?? CGFloat.infinity / CGFloat(game.columns), ((NSScreen.main?.frame.height ?? CGFloat.infinity)-controlPanelHeight-200) / CGFloat(game.rows   )), ogCellSize)
+            ZStack {
+                VStack {
+                    HStack{
+                        Text("Mines: \(game.minesSpeculated)").padding()
+                        //reset button
+                        Button(action: {
+                            game.generateBoard()
+                            self.timeElapsed = 0
+                            
+                        }) {
+                            Text("Reset")
+                        }.padding()
+                        //add a timer
+                        Text("Timer: \(timeElapsed)").padding()
+                        .frame(width:100,alignment: .leading)
+                    }
+                    //.frame(alignment: .center)
+                    //Spacer(minLength: controlPanelHeight)
+                    ZStack {
+                         Rectangle()
+                            .fill(Color.gray)
+                            .frame(width: CGFloat(game.columns) * cellSize + CGFloat(game.columns) * 2, 
+                                   height: CGFloat(game.rows) * cellSize + CGFloat(game.rows) * 2)
+                        VStack(spacing: 0) {
+                            ForEach(0..<game.rows, id: \.self) { row in
+                                HStack(spacing: 0) {
+                                    ForEach(0..<game.columns, id: \.self) { column in
+                                        CellView(game: game, row: row, column: column, cellWidth: cellSize, cellHeight: cellSize)
+                                            .padding(1)
+                                    }
+                                }
+                                .frame(alignment: .center)
+                            }
+                            .frame(alignment: .center) // This will center the VStack
+                        }
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .scaleEffect(self.zoomLevel)
+                        .animation(.easeInOut(duration: 0.2), value: self.zoomLevel)
+                        .frame(alignment: .center)
+                    }
+                    
+                }
+                .frame(alignment: .center)
+                
+            }
+            
+            .gesture(MagnificationGesture()
+                .updating($magnification) { currentState, gestureState, transaction in
+                    gestureState = currentState
+                }
+                .onEnded { value in
+                    self.zoomLevel *= value
+                    if self.zoomLevel > 1.0 {
+                        self.zoomLevel = 1.0
+                    }
+                }
+            )
+        }
+        .frame(maxWidth: NSScreen.main?.frame.width, maxHeight: NSScreen.main?.frame.width, alignment: .center)
+        .onAppear {
+            if game.rows == 0 && game.columns == 0 && game.mines == 0 {
+                game.updateDimensions(r: 9, c: 9, m: 10)
+            }
+            game.generateBoard()
+            
+            self.game.timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true){ _ in
+                self.timeElapsed += 1
+            }
+        }
+        .onDisappear{
+            self.game.timer?.invalidate()
+            self.game.timer = nil
+        }
+    }
+    
+}
+
+
+struct GameView_Previews: PreviewProvider {
+    static var previews: some View {
+        GameView()
+    }
+}
+
