@@ -60,7 +60,7 @@ struct GameView: View {
                                 }
                                 .frame(alignment: .center)
                             }
-                            .frame(alignment: .center) // This will center the VStack
+                            .frame(alignment: .center)
                             
                         }
                         .frame(maxWidth: .infinity, maxHeight: .infinity,alignment: .center)
