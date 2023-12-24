@@ -30,6 +30,7 @@
 		948092512B37796B00447D81 /* Icon-64.png in Resources */ = {isa = PBXBuildFile; fileRef = 948092492B37796B00447D81 /* Icon-64.png */; };
 		948092522B37796B00447D81 /* Icon-128.png in Resources */ = {isa = PBXBuildFile; fileRef = 9480924A2B37796B00447D81 /* Icon-128.png */; };
 		948092532B37796B00447D81 /* OIG.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 9480924B2B37796B00447D81 /* OIG.jpeg */; };
+		948092612B377D1200447D81 /* mine-sweeper.otf in Resources */ = {isa = PBXBuildFile; fileRef = 948092602B377D1200447D81 /* mine-sweeper.otf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -78,6 +79,7 @@
 		948092492B37796B00447D81 /* Icon-64.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-64.png"; sourceTree = "<group>"; };
 		9480924A2B37796B00447D81 /* Icon-128.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-128.png"; sourceTree = "<group>"; };
 		9480924B2B37796B00447D81 /* OIG.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = OIG.jpeg; sourceTree = "<group>"; };
+		948092602B377D1200447D81 /* mine-sweeper.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "mine-sweeper.otf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,6 +110,7 @@
 		948091F82B321CEF00447D81 = {
 			isa = PBXGroup;
 			children = (
+				948092602B377D1200447D81 /* mine-sweeper.otf */,
 				948092032B321CEF00447D81 /* Minesweeper */,
 				948092152B321CF000447D81 /* MinesweeperTests */,
 				9480921F2B321CF000447D81 /* MinesweeperUITests */,
@@ -173,9 +176,7 @@
 		9480923B2B36287A00447D81 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
-				9480923E2B3628CF00447D81 /* license.txt */,
-				9480923C2B3628CF00447D81 /* mine-sweeper.ttf */,
-				9480923D2B3628CF00447D81 /* readme.txt */,
+				948092542B377C5700447D81 /* ttf */,
 			);
 			path = Fonts;
 			sourceTree = "<group>";
@@ -193,6 +194,16 @@
 				9480924B2B37796B00447D81 /* OIG.jpeg */,
 			);
 			path = AppIcon;
+			sourceTree = "<group>";
+		};
+		948092542B377C5700447D81 /* ttf */ = {
+			isa = PBXGroup;
+			children = (
+				9480923E2B3628CF00447D81 /* license.txt */,
+				9480923C2B3628CF00447D81 /* mine-sweeper.ttf */,
+				9480923D2B3628CF00447D81 /* readme.txt */,
+			);
+			path = ttf;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -304,6 +315,7 @@
 				9480920C2B321CF000447D81 /* Preview Assets.xcassets in Resources */,
 				948092402B3628CF00447D81 /* readme.txt in Resources */,
 				948092522B37796B00447D81 /* Icon-128.png in Resources */,
+				948092612B377D1200447D81 /* mine-sweeper.otf in Resources */,
 				948092532B37796B00447D81 /* OIG.jpeg in Resources */,
 				9480924D2B37796B00447D81 /* Icon-512.png in Resources */,
 				9480924E2B37796B00447D81 /* Icon-1024.png in Resources */,
@@ -511,11 +523,13 @@
 				DEVELOPMENT_TEAM = KTBFQFW59U;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.strategy-games";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = ncwd.Minesweeper;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -538,11 +552,13 @@
 				DEVELOPMENT_TEAM = KTBFQFW59U;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.strategy-games";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = ncwd.Minesweeper;
 				PRODUCT_NAME = "$(TARGET_NAME)";
