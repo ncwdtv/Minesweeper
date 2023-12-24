@@ -25,7 +25,7 @@ struct GameView: View {
             ZStack {
                 VStack {
                     HStack{
-                        Text("Mines: \(game.minesSpeculated)").padding()
+                        Text("Mines Remaining: \(game.minesSpeculated)").padding()
                         //reset button
                         Button(action: {
                             game.generateBoard()
