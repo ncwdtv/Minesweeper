@@ -14,9 +14,9 @@ class MinesweeperGame: ObservableObject {
     
 
     @Published var difficulty: String = "Easy"
-    @Published var rowsString: String = ""
-    @Published var columnsString: String = ""
-    @Published var minesString: String = ""
+    @Published var rowsString = ""
+    @Published var columnsString = ""
+    @Published var minesString = ""
     @Published var rows = 0
     @Published var columns = 0
     @Published var mines = 0
@@ -24,7 +24,6 @@ class MinesweeperGame: ObservableObject {
     static var directions = [(-1, 0), (1, 0), (0, -1), (0, 1), (-1, -1), (-1, 1), (1, -1), (1, 1)]
     @Published var minesSpeculated = 0
     @Published var gameOver = false
-    @Published var bombLocation : (Int, Int)? = nil
 
     
     @Published var gamesPlayed = 0
@@ -174,7 +173,6 @@ class MinesweeperGame: ObservableObject {
                 if(board[newI][newJ] == -1){
                     revealAll(revealed: &revealed)
                     endGame()
-                    bombLocation = (newI,newJ)
                     return
                 }
                 numRevealed += 1
@@ -189,7 +187,7 @@ class MinesweeperGame: ObservableObject {
     }
     func revealZeros(i: Int, j: Int, board: inout [[Int]], revealed: inout [[Bool]],originalBoard: [[Int]], flag: Bool, numRevealed: inout Int) {
         //reveal the current square and reveal the zeroes around it
-        if revealed[i][j] == true {
+        if revealed[i][j] == true && board[i][j] != -3 {
             return
         }
 
@@ -198,13 +196,16 @@ class MinesweeperGame: ObservableObject {
             return
         }
 
-        
 
         if flag {
             if(board[i][j] == -3){
                 board[i][j] = originalBoard[i][j]
                 minesSpeculated += 1
-                revealed[i][j] = false
+                if(board[i][j] == 0){
+                    revealed[i][j] = true
+                }else{
+                  revealed[i][j] = false  
+                }
             }
             else{
                 board[i][j] = -3
@@ -214,13 +215,13 @@ class MinesweeperGame: ObservableObject {
             return
         }else{
             if(board[i][j] == -3){
+
                 minesSpeculated += 1
                 board[i][j] = originalBoard[i][j]
             }
             if board[i][j] == -1 {
                 revealAll(revealed: &revealed)
                 endGame()
-                bombLocation = (i,j)
                 return
             }
         }

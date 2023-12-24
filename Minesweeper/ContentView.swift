@@ -21,7 +21,7 @@ struct ContentView: View {
                 }
                 .padding()
                 
-                NavigationLink(destination: SettingsView(game : game)) {
+                NavigationLink(destination: SettingsView(game : game)) { 
                     Text("Settings")
                 }
                 .padding()

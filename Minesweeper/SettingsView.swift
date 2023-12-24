@@ -10,11 +10,12 @@ import SwiftUI
 
 struct SettingsView: View {
     @ObservedObject var game: MinesweeperGame
+    @Environment(\.presentationMode) var presentationMode
     
     @State private var isCustom: Bool = false
     @State private var selectedDifficulty: String = ""
     var body: some View {
-        NavigationStack{
+        // NavigationStack{
             VStack{
                 Spacer(minLength: 0)
                 Text("Settings")
@@ -22,10 +23,6 @@ struct SettingsView: View {
                     .padding()
                 
                 Button(action: {
-                    game.difficulty = "Easy"
-                    game.rowsString = "9"
-                    game.columnsString = "9"
-                    game.minesString = "10"
                     //call a func in game to update rows, columns, and mines
                     game.updateDimensions(r:9,c:9,m:10)
                     self.isCustom = false
@@ -43,10 +40,6 @@ struct SettingsView: View {
                 .padding()
                 
                 Button(action: {
-                    game.difficulty = "Medium"
-                    game.rowsString = "16"
-                    game.columnsString = "16"
-                    game.minesString = "40"
                     game.updateDimensions(r: 16, c: 16, m: 40)
                     self.isCustom = false
                     if selectedDifficulty != "Medium"{
@@ -64,10 +57,6 @@ struct SettingsView: View {
                 .padding()
                 
                 Button(action: {
-                    game.difficulty = "Hard"
-                    game.rowsString = "30"
-                    game.columnsString = "16"
-                    game.minesString = "99"
                     game.updateDimensions(r: 16, c: 30, m: 99)
                     self.isCustom = false
                     if selectedDifficulty != "Hard"{
@@ -133,24 +122,22 @@ struct SettingsView: View {
                     .background(Color.blue)
                     .cornerRadius(2)
                 }
-                
-                NavigationLink{
-                    ContentView(game: game)
-                } label: {
+
+                Button(action: {
+                    self.presentationMode.wrappedValue.dismiss()
+                }) {
                     Text("Back")
                 }
                 .padding()
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center) // This will center the VStack
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
                 
+            
                 Spacer(minLength: 0) // This will push the content to the top
-            }
-        }        
+            }.navigationBarBackButtonHidden(true)
+        // }        
+        
     }
 }
 
 
-struct SettingsView_Previews: PreviewProvider {
-    static var previews: some View {
-        SettingsView(game: MinesweeperGame())
-    }
-}
+

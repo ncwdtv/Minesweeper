@@ -10,6 +10,7 @@ import Combine
 
 struct GameView: View {
     @ObservedObject var game = MinesweeperGame()
+    @Environment(\.presentationMode) var presentationMode
     //@State var timer: Timer? = nil
     @State var timeElapsed: Int = 0
     var ogCellSize: CGFloat = 40
@@ -20,7 +21,7 @@ struct GameView: View {
     var body: some View {
         
         GeometryReader { geometry in
-            let cellSize = min(min(NSScreen.main?.frame.width ?? CGFloat.infinity / CGFloat(game.columns), ((NSScreen.main?.frame.height ?? CGFloat.infinity)-controlPanelHeight-200) / CGFloat(game.rows   )), ogCellSize)
+            let cellSize = min(min(NSScreen.main?.frame.width ?? CGFloat.infinity / CGFloat(game.columns), ((NSScreen.main?.frame.height ?? CGFloat.infinity)-controlPanelHeight-230) / CGFloat(game.rows   )), ogCellSize)
             ZStack {
                 VStack {
                     HStack{
@@ -29,6 +30,11 @@ struct GameView: View {
                         Button(action: {
                             game.generateBoard()
                             self.timeElapsed = 0
+                            if game.timer == nil {
+                                self.game.timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true){ _ in
+                                    self.timeElapsed += 1
+                                }
+                            }
                             
                         }) {
                             Text("Reset")
@@ -55,12 +61,19 @@ struct GameView: View {
                                 .frame(alignment: .center)
                             }
                             .frame(alignment: .center) // This will center the VStack
+                            
                         }
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity,alignment: .center)
                         .scaleEffect(self.zoomLevel)
                         .animation(.easeInOut(duration: 0.2), value: self.zoomLevel)
-                        .frame(alignment: .center)
+
+                        
                     }
+                    Button(action:{
+                            self.presentationMode.wrappedValue.dismiss()
+                        }){
+                            Text("Back")
+                        }.padding()
                     
                 }
                 .frame(alignment: .center)
@@ -93,7 +106,7 @@ struct GameView: View {
         .onDisappear{
             self.game.timer?.invalidate()
             self.game.timer = nil
-        }
+        }.navigationBarBackButtonHidden(true)
     }
     
 }
