@@ -12,7 +12,6 @@ struct GameView: View {
     @ObservedObject var game = MinesweeperGame()
     @Environment(\.presentationMode) var presentationMode
     //@State var timer: Timer? = nil
-    @State var timeElapsed: Int = 0
     var ogCellSize: CGFloat = 40
     let controlPanelHeight: CGFloat = 50
     @State private var zoomLevel: Double = 1.0
@@ -25,25 +24,24 @@ struct GameView: View {
             ZStack {
                 VStack {
                     HStack{
-                        Text("Mines Remaining: \(game.minesSpeculated)").padding()
-                        //reset button
+                        Text("Mines: \(game.minesSpeculated)").padding()
                         Button(action: {
                             game.generateBoard()
-                            self.timeElapsed = 0
+                            game.numRevealed = 0
+                            self.game.timeElapsed = 0
                             if game.timer == nil {
                                 self.game.timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true){ _ in
-                                    self.timeElapsed += 1
+                                    self.game.timeElapsed += 1
                                 }
                             }
                             
                         }) {
-                            Text("Reset")
+                            Text(game.winOrLose == 0 ? "Reset" : game.winOrLose == 1 ? "Lost" : "Won")
                         }.padding()
-                        //add a timer
-                        Text("Timer: \(timeElapsed)").padding()
+                        Text("Timer: \(game.timeElapsed)").padding()
                         .frame(width:100,alignment: .leading)
                     }
-                    //.frame(alignment: .center)
+                    .frame(alignment: .center)
                     //Spacer(minLength: controlPanelHeight)
                     ZStack {
                          Rectangle()
@@ -97,15 +95,32 @@ struct GameView: View {
             if game.rows == 0 && game.columns == 0 && game.mines == 0 {
                 game.updateDimensions(r: 9, c: 9, m: 10)
             }
-            game.generateBoard()
-            
-            self.game.timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true){ _ in
-                self.timeElapsed += 1
+            if !game.isGameInProgress {
+                game.generateBoard() // ALLOW USER TO RE-ENTER THEIR GAME
+                
+                self.game.timer?.invalidate()
+                self.game.timer = nil
+                self.game.timeElapsed = 0
+                self.game.savedTimeElapsed = 0
+                self.game.timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true){ _ in
+                    self.game.timeElapsed += 1
+                }
+            }else{
+                self.game.timeElapsed = self.game.savedTimeElapsed
+                self.game.timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true){ _ in
+                    self.game.timeElapsed += 1
+    
             }
+            }
+
+            
+            
+            
         }
         .onDisappear{
             self.game.timer?.invalidate()
             self.game.timer = nil
+            self.game.savedTimeElapsed = self.game.timeElapsed
         }.navigationBarBackButtonHidden(true)
     }
     

@@ -26,10 +26,10 @@ struct ContentView: View {
                 }
                 .padding()
                 
-                //NavigationLink(destination: StatisticsView(game : game)){
-                //    Text("Statistics")
-                //}
-                //.padding()
+                NavigationLink(destination: StatisticsView(game : game)){
+                    Text("Statistics")
+                }
+                .padding()
                 
                 Button(action: {
                     //Quit the app

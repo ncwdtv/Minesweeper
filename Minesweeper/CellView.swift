@@ -32,29 +32,16 @@ struct CellView: View {
                 Rectangle()
                     .fill(Color(red: 0.75, green: 0.75, blue: 0.75))
                     .frame(width: cellWidth * 0.9, height: cellHeight*0.9)
+                if(game.board[row][column] == -3){
+                    Text("`")
+                        .foregroundColor(.red) // Set text color to red
+                        .font(.custom("MINE-SWEEPER", size: 20))
+                }
                      
             } else {
                 Rectangle()
                     .foregroundColor(Color(red: 0.75, green: 0.75, blue: 0.75))
-                
-            }
-        }.frame(width: cellWidth, height: cellHeight)
-        
-            .onTapGesture(count: 1) {
-                // Left click action
-                
-                if game.revealedBoard[row][column] == true && game.board[row][column] != -3{
-                    game.revealAroundMiddleMan(i: row, j: column)
-                }
-                game.revealZeroesMiddleMan(i: row, j: column, flag: false)
-                
-            }
-            .onLongPressGesture(minimumDuration: 0.5) {
-                // Right click action
-                game.revealZeroesMiddleMan(i: row, j: column, flag: true)
-            }.overlay(
-                Group {
-                    if row < game.board.count && column < game.board[row].count {
+                if row < game.board.count && column < game.board[row].count {
                         if(game.revealedBoard[row][column] == true){
 
                             // * for bomb ` for flag 
@@ -119,8 +106,25 @@ struct CellView: View {
                         Text("I")
                             .foregroundColor(.black) // Set text color to black
                     }
+                
+            }
+        }.frame(width: cellWidth, height: cellHeight)
+        
+            .onTapGesture(count: 1) {
+                // Left click action
+                self.game.effectiveClicks += 1
+                self.game.totalClicks += 1
+                if game.revealedBoard[row][column] == true && game.board[row][column] != -3{
+                    game.revealAroundMiddleMan(i: row, j: column)
                 }
-            )
+                game.revealZeroesMiddleMan(i: row, j: column, flag: false)
+                
+            }
+            .onLongPressGesture(minimumDuration: 0.5) {
+                // Right click action
+                self.game.totalClicks += 1
+                game.revealZeroesMiddleMan(i: row, j: column, flag: true)
+            }
         
         
         

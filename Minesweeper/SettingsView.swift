@@ -14,6 +14,7 @@ struct SettingsView: View {
     
     @State private var isCustom: Bool = false
     @State private var selectedDifficulty: String = ""
+    @State private var isButtonPressed = false
     var body: some View {
         // NavigationStack{
             VStack{
@@ -109,18 +110,24 @@ struct SettingsView: View {
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                     
                     Button(action: {
+                        self.isButtonPressed = true
                         if let rows = Int(game.rowsString),
                            let columns = Int(game.columnsString),
                            let mines = Int(game.minesString) {
                             game.updateDimensions(r: rows, c: columns, m: mines)
                         }
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5){
+                            self.isButtonPressed = false
+                        }
                     }) {
-                        Text("Apply Custom Settings")
+                        Text(isButtonPressed ? "Applied" : "Apply Custom Settings")
+                        .frame(minWidth: 150)
                     }
+                    
                     .padding()
                     .foregroundColor(.white)
-                    .background(Color.blue)
                     .cornerRadius(2)
+                    
                 }
 
                 Button(action: {
